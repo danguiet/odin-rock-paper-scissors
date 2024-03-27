@@ -70,8 +70,24 @@ function isChoiceValid(choice) {
   );
 }
 
-//Play 10 times rock against the computer
-for (i = 0; i < 10; i++) {
-  let playerChoice = "rock";
-  console.log(playRound(playerChoice, getComputerChoice()));
+const GAME_NUMBER = 5;
+function playGame() {
+  let playerWin = 0;
+  let playerChoice;
+  for (i = 0; i < GAME_NUMBER; i++) {
+    playerChoice = prompt("Let's play :");
+    let result = playRound(playerChoice, getComputerChoice());
+    console.log(result);
+    if ((result == PLAYER_WIN_MESSAGE)) {
+      playerWin++;
+    }
+  }
+
+  if (playerWin >= GAME_NUMBER / 2) {
+    console.log("You won the game!");
+  } else {
+    console.log("You lost the game!");
+  }
 }
+
+playGame();
