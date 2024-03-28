@@ -16,6 +16,7 @@ function getComputerChoice() {
   }
 }
 
+//return -1 if loose, 0 tie or 1 win
 function playRound(playerChoice, computerChoice) {
   //To avoid weird case
   let playerChoiceFormatted = playerChoice.toLowerCase();
@@ -25,41 +26,44 @@ function playRound(playerChoice, computerChoice) {
     !isChoiceValid(playerChoiceFormatted) ||
     !isChoiceValid(computerChoiceFormatted)
   ) {
-    return ERROR_MESSAGE;
+    console.log(ERROR_MESSAGE);
+    return 0;
   }
 
   if (playerChoiceFormatted == computerChoiceFormatted) {
-    return PLAYER_TIE_MESSAGE;
+    return 0;
   }
 
   switch (playerChoiceFormatted) {
     case "rock":
       if (computerChoiceFormatted == "paper") {
-        return PLAYER_LOOSE_MESSAGE;
+        return -1;
       } else if (computerChoiceFormatted == "scissors") {
-        return PLAYER_WIN_MESSAGE;
+        return 1;
       }
       break;
     case "paper":
       if (computerChoiceFormatted == "scissors") {
-        return PLAYER_LOOSE_MESSAGE;
+        return -1;
       } else if (computerChoiceFormatted == "rock") {
-        return PLAYER_WIN_MESSAGE;
+        return 1;
       }
       break;
     case "scissors":
       if (computerChoiceFormatted == "rock") {
-        return PLAYER_LOOSE_MESSAGE;
+        return -1;
       } else if (computerChoiceFormatted == "paper") {
-        return PLAYER_WIN_MESSAGE;
+        return 1;
       }
       break;
     default:
-      return ERROR_MESSAGE;
+      console.log(ERROR_MESSAGE);
+      return 0;
   }
 
   //Should not get here
-  return ERROR_MESSAGE;
+  console.log(ERROR_MESSAGE);
+  return 0;
 }
 
 function isChoiceValid(choice) {
@@ -70,20 +74,30 @@ function isChoiceValid(choice) {
   );
 }
 
-const GAME_NUMBER = 5;
 function playGame() {
-  let playerWin = 0;
+  let playerScore = 0;
   let playerChoice;
-  for (i = 0; i < GAME_NUMBER; i++) {
+
+  for (let i = 0; i < 5; i++) {
     playerChoice = prompt("Let's play :");
+    if (!isChoiceValid(playerChoice)) {
+      console.log("Incorrect choice, try again.");
+      i = i - 1;
+      continue;
+    }
+
     let result = playRound(playerChoice, getComputerChoice());
-    console.log(result);
-    if ((result == PLAYER_WIN_MESSAGE)) {
-      playerWin++;
+    playerScore = playerScore + result;
+    if (result == -1) {
+      console.log(PLAYER_LOOSE_MESSAGE);
+    } else if (result == 0) {
+      console.log(PLAYER_TIE_MESSAGE);
+    } else if (result == 1) {
+      console.log(PLAYER_WIN_MESSAGE);
     }
   }
 
-  if (playerWin >= GAME_NUMBER / 2) {
+  if (playerScore >= 0) {
     console.log("You won the game!");
   } else {
     console.log("You lost the game!");
